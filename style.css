@@ -31,6 +31,16 @@ body::before {
   color: black;
 }
 
+/* FIX: force button text to stay white */
+.btn {
+  background: black;
+  color: white !important;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-block;
+}
+
 .hero {
   text-align: center;
   padding: 120px 20px;
