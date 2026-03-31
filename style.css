@@ -77,6 +77,56 @@ body::before {
   color: #333;
 }
 
+.features, .how {
+  padding: 100px 60px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* row layout */
+.feature-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 80px;
+  gap: 40px;
+}
+
+/* alternate layout */
+.feature-row.reverse {
+  flex-direction: row-reverse;
+}
+
+/* text block */
+.text {
+  flex: 1;
+}
+
+.text h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.text p {
+  color: #555;
+  line-height: 1.6;
+  max-width: 420px;
+}
+
+/* visual placeholder */
+.visual {
+  flex: 1;
+  height: 200px;
+  background: linear-gradient(to bottom, #fafafa, #f0f0f0);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* smaller visual for how-it-works */
+.visual.small {
+  height: 150px;
+}
+
 .cta {
   text-align: center;
   padding: 100px 20px;
