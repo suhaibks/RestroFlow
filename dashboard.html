@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Dashboard</title>
 <link rel="stylesheet" href="dashboard.css">
+
 <script>
-if (localStorage.getItem("loggedIn") !== "true") {
-  window.location.href = "login.html";
+if(localStorage.getItem("loggedIn")!=="true"){
+location.href="login.html";
 }
 </script>
 </head>
@@ -42,9 +43,7 @@ if (localStorage.getItem("loggedIn") !== "true") {
 <table>
 <thead>
 <tr>
-<th>ID</th>
-<th>Branch</th>
-<th>Status</th>
+<th>ID</th><th>Branch</th><th>Status</th>
 </tr>
 </thead>
 <tbody id="ordersTable"></tbody>
@@ -54,34 +53,33 @@ if (localStorage.getItem("loggedIn") !== "true") {
 </div>
 
 <script>
-function logout() {
-if (confirm("Logout?")) {
+
+function logout(){
+if(confirm("Logout?")){
 localStorage.removeItem("loggedIn");
-window.location.href = "login.html";
+location.href="login.html";
 }
 }
 
-function loadDashboard() {
-const orders = JSON.parse(localStorage.getItem("orders")) || [];
-const branches = JSON.parse(localStorage.getItem("branches")) || [];
+function loadDashboard(){
+const orders=JSON.parse(localStorage.getItem("orders"))||[];
+const branches=JSON.parse(localStorage.getItem("branches"))||[];
 
-let revenue = 0, pending = 0;
+let revenue=0,pending=0;
 
-orders.forEach(o => {
-revenue += Number(o.amount || 0);
-if (o.status === "Pending") pending++;
+orders.forEach(o=>{
+revenue+=Number(o.amount||0);
+if(o.status==="Pending") pending++;
 });
 
-document.getElementById("totalOrders").innerText = "Total Orders: " + orders.length;
-document.getElementById("totalRevenue").innerText = "Revenue: ₹" + revenue;
-document.getElementById("totalBranches").innerText = "Branches: " + branches.length;
-document.getElementById("pendingOrders").innerText = "Pending: " + pending;
+totalOrders.innerText="Total Orders: "+orders.length;
+totalRevenue.innerText="Revenue: ₹"+revenue;
+totalBranches.innerText="Branches: "+branches.length;
+pendingOrders.innerText="Pending: "+pending;
 
-const table = document.getElementById("ordersTable");
-table.innerHTML = "";
-
-orders.slice(-5).reverse().forEach(o => {
-table.innerHTML += `
+ordersTable.innerHTML="";
+orders.slice(-5).reverse().forEach(o=>{
+ordersTable.innerHTML+=`
 <tr>
 <td>#${o.id}</td>
 <td>${o.branch}</td>
@@ -92,13 +90,12 @@ table.innerHTML += `
 
 loadDashboard();
 
-const currentPage = window.location.pathname.split("/").pop();
-document.querySelectorAll(".nav-link").forEach(link => {
-if (link.getAttribute("href") === currentPage) {
-link.classList.add("active");
-}
+/* active nav */
+const p=location.pathname.split("/").pop();
+document.querySelectorAll(".nav-link").forEach(l=>{
+if(l.getAttribute("href")===p)l.classList.add("active");
 });
 </script>
-  
+
 </body>
 </html>
