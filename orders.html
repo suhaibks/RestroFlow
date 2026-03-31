@@ -25,24 +25,35 @@
 
 <h1>Orders</h1>
 
+<!-- Incoming Orders -->
 <h2>Incoming Orders</h2>
 <table>
 <thead>
 <tr>
-<th>ID</th><th>Branch</th><th>Items</th><th>Amount</th><th>Status</th>
+<th>ID</th>
+<th>Branch</th>
+<th>Items</th>
+<th>Amount</th>
+<th>Status</th>
 </tr>
 </thead>
 <tbody id="incomingOrders"></tbody>
 </table>
 
-<h2 style="margin-top:40px;">All Orders</h2>
+<!-- Completed Orders -->
+<h2 style="margin-top:40px;">Completed Orders</h2>
 <table>
 <thead>
 <tr>
-<th>ID</th><th>Branch</th><th>Items</th><th>Amount</th><th>Status</th><th>Time</th>
+<th>ID</th>
+<th>Branch</th>
+<th>Items</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Time</th>
 </tr>
 </thead>
-<tbody id="allOrders"></tbody>
+<tbody id="completedOrders"></tbody>
 </table>
 
 </main>
@@ -50,6 +61,7 @@
 
 <script>
 
+/* logout */
 function logout(){
 if(confirm("Logout?")){
 localStorage.removeItem("loggedIn");
@@ -57,29 +69,35 @@ location.href="login.html";
 }
 }
 
-/* FIX old data */
+/* FIX old data (ensure time exists) */
 function fixOldOrders(){
 let orders=JSON.parse(localStorage.getItem("orders"))||[];
+let updated=false;
+
 orders.forEach(o=>{
 if(!o.time){
 o.time=new Date().toISOString();
+updated=true;
 }
 });
+
+if(updated){
 localStorage.setItem("orders",JSON.stringify(orders));
 }
+}
 
-/* generate */
+/* simulate incoming orders */
 function generateOrder(){
 let branches=JSON.parse(localStorage.getItem("branches"))||[];
 if(branches.length===0)return;
 
-let random=branches[Math.floor(Math.random()*branches.length)].name;
+let randomBranch=branches[Math.floor(Math.random()*branches.length)].name;
 
 let orders=JSON.parse(localStorage.getItem("orders"))||[];
 
 orders.push({
 id:Date.now(),
-branch:random,
+branch:randomBranch,
 items:"Pizza, Burger",
 amount:Math.floor(Math.random()*500)+100,
 status:"Pending",
@@ -89,31 +107,35 @@ time:new Date().toISOString()
 localStorage.setItem("orders",JSON.stringify(orders));
 }
 
-/* update status */
+/* simulate status updates */
 function updateStatus(){
 let orders=JSON.parse(localStorage.getItem("orders"))||[];
+
 orders.forEach(o=>{
-if(o.status==="Pending")o.status="Preparing";
-else if(o.status==="Preparing")o.status="Delivered";
+if(o.status==="Pending") o.status="Preparing";
+else if(o.status==="Preparing") o.status="Delivered";
 });
+
 localStorage.setItem("orders",JSON.stringify(orders));
 }
 
-/* load */
+/* load orders */
 function loadOrders(){
 let orders=JSON.parse(localStorage.getItem("orders"))||[];
 
 incomingOrders.innerHTML="";
-allOrders.innerHTML="";
+completedOrders.innerHTML="";
 
-let count=0;
+let incomingCount=0;
+let deliveredCount=0;
 
 orders.forEach(o=>{
 
 let time=new Date(o.time).toLocaleString();
 
+/* Incoming = Pending */
 if(o.status==="Pending"){
-count++;
+incomingCount++;
 incomingOrders.innerHTML+=`
 <tr>
 <td>#${o.id}</td>
@@ -124,7 +146,10 @@ incomingOrders.innerHTML+=`
 </tr>`;
 }
 
-allOrders.innerHTML+=`
+/* Completed = Delivered only */
+if(o.status==="Delivered"){
+deliveredCount++;
+completedOrders.innerHTML+=`
 <tr>
 <td>#${o.id}</td>
 <td>${o.branch}</td>
@@ -133,16 +158,32 @@ allOrders.innerHTML+=`
 <td>${o.status}</td>
 <td>${time}</td>
 </tr>`;
+}
+
 });
 
-if(count===0){
+/* empty state: incoming */
+if(incomingCount===0){
 incomingOrders.innerHTML=`
-<tr><td colspan="5" style="text-align:center;color:#666;padding:20px;">
+<tr>
+<td colspan="5" style="text-align:center;color:#666;padding:20px;">
 Waiting for incoming orders...
-</td></tr>`;
+</td>
+</tr>`;
+}
+
+/* empty state: completed */
+if(deliveredCount===0){
+completedOrders.innerHTML=`
+<tr>
+<td colspan="6" style="text-align:center;color:#666;padding:20px;">
+No completed orders yet
+</td>
+</tr>`;
 }
 }
 
+/* run system */
 fixOldOrders();
 
 setInterval(()=>{
@@ -153,11 +194,14 @@ loadOrders();
 
 loadOrders();
 
-/* nav */
-const p=location.pathname.split("/").pop();
+/* active sidebar */
+const currentPage=location.pathname.split("/").pop();
 document.querySelectorAll(".nav-link").forEach(l=>{
-if(l.getAttribute("href")===p)l.classList.add("active");
+if(l.getAttribute("href")===currentPage){
+l.classList.add("active");
+}
 });
+
 </script>
 
 </body>
