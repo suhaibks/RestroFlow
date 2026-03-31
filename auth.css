@@ -1,86 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
-
-:root {
-  --primary: #8F2321;
-  --primary-dark: #6f1b1a;
-  --bg-light: #DED0C3;
-  --bg-cool: #A3B5C7;
-  --white: #FFFFFF;
-  --black: #111111;
-}
-
-/* LAYOUT */
 body {
-  margin: 0;
-  font-family: "Inter";
+  font-family: Arial;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-  display: flex;
+  background: #f4f4f4;
 }
 
-/* LEFT PANEL */
-.auth-left {
-  flex: 1;
-  background: var(--primary);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 60px;
-}
-
-/* RIGHT PANEL */
 .auth-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 60px;
-  background: var(--white);
+  background: white;
+  padding: 30px;
+  width: 300px;
+  text-align: center;
 }
 
-/* INPUT */
 input {
-  padding: 12px;
+  width: 100%;
+  padding: 10px;
   margin: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #ddd;
 }
 
-/* BUTTON */
 button {
-  padding: 12px;
-  background: var(--primary);
+  width: 100%;
+  padding: 10px;
+  background: #ff5a3c;
   color: white;
   border: none;
-  border-radius: 12px;
-  margin-top: 10px;
-}
-
-button:hover {
-  background: var(--primary-dark);
-}
-
-/* LINK */
-a {
-  color: var(--primary);
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-
-  body {
-    flex-direction: column;
-  }
-
-  /* HIDE LEFT PANEL (optional but recommended) */
-  .auth-left {
-    display: none;
-  }
-
-  /* FULL WIDTH FORM */
-  .auth-box {
-    width: 100%;
-    padding: 30px 20px;
-  }
-
 }
