@@ -1,23 +1,7 @@
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to bottom, #F9EBD9, #FFFFFF);
-}
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 30px;
-  background: white;
-  border-bottom: 1px solid #eee;
-}
-
-.user button {
-  border: none;
-  background: #439093;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(to bottom, #ffffff, #f5f5f5);
 }
 
 .container {
@@ -25,28 +9,48 @@ body {
 }
 
 .sidebar {
-  width: 200px;
+  width: 220px;
   background: white;
-  padding: 20px;
   border-right: 1px solid #eee;
+  height: 100vh;
+  padding: 20px;
 }
 
 .sidebar a {
   display: block;
-  margin: 10px 0;
-  color: #439093;
+  margin: 12px 0;
+  color: black;
   text-decoration: none;
 }
 
 .main {
   flex: 1;
-  padding: 20px;
+  padding: 40px;
 }
 
-.data-row {
-  padding: 15px;
-  margin: 10px 0;
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.cards div {
   background: white;
-  border-radius: 12px;
-  border: 1px solid #eee;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
 }
