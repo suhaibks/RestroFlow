@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Dashboard</title>
   <link rel="stylesheet" href="dashboard.css">
 
-  <!-- STEP 5: Protect dashboard -->
   <script>
     if (localStorage.getItem("loggedIn") !== "true") {
       window.location.href = "login.html";
@@ -14,62 +12,39 @@
 </head>
 <body>
 
+<header class="topbar">
+  <h2>RestroFlow</h2>
+  <div class="user">
+    <span>Welcome</span>
+    <button onclick="logout()">Logout</button>
+  </div>
+</header>
+
 <div class="container">
 
-  <!-- Sidebar -->
   <aside class="sidebar">
-    <h2>RestroFlow</h2>
     <a href="#">Dashboard</a>
     <a href="#">Orders</a>
     <a href="#">Menu</a>
     <a href="#">Branches</a>
-    <a href="#">Reports</a>
-
-    <!-- STEP 6: Logout -->
-    <a href="#" onclick="logout()">Logout</a>
   </aside>
 
-  <!-- Main Content -->
   <main class="main">
-
     <h1>Dashboard</h1>
 
-    <div class="cards">
-      <div>Total Orders: 120</div>
-      <div>Revenue: ₹45,000</div>
-      <div>Active Branches: 5</div>
-      <div>Pending Orders: 8</div>
-    </div>
-
-    <h2>Recent Orders</h2>
-    <table>
-      <tr>
-        <th>Order ID</th>
-        <th>Branch</th>
-        <th>Status</th>
-      </tr>
-      <tr>
-        <td>#101</td>
-        <td>Branch A</td>
-        <td>Delivered</td>
-      </tr>
-      <tr>
-        <td>#102</td>
-        <td>Branch B</td>
-        <td>Preparing</td>
-      </tr>
-    </table>
+    <div class="data-row">Total Orders: 120</div>
+    <div class="data-row">Revenue: ₹45,000</div>
+    <div class="data-row">Branches: 5</div>
 
   </main>
 
 </div>
 
-<!-- Logout Script -->
 <script>
-  function logout() {
-    localStorage.removeItem("loggedIn");
-    window.location.href = "login.html";
-  }
+function logout() {
+  localStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
+}
 </script>
 
 </body>
