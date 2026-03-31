@@ -132,6 +132,59 @@ body::before {
   padding: 100px 20px;
 }
 
+/* section header */
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-header h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.section-header p {
+  color: #666;
+}
+
+/* better spacing */
+.features, .how {
+  padding: 100px 40px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* fix empty feel */
+.feature-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 70px;
+  gap: 60px;
+}
+
+/* icon container */
+.visual {
+  flex: 1;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border-radius: 16px;
+  border: 1px solid #eee;
+}
+
+.visual img {
+  width: 60px;
+  opacity: 0.8;
+}
+
+/* smaller visuals */
+.visual.small {
+  height: 130px;
+}
+
 footer {
   text-align: center;
   padding: 20px;
