@@ -142,3 +142,27 @@ padding:8px 12px;
 border-radius:8px;
 cursor:pointer;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background: #fafafa;
+  font-weight: 500;
+}
+
+tr:hover {
+  background: #f9f9f9;
+}
