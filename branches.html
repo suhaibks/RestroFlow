@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Branches</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<header class="topbar">
+<h2>RestroFlow</h2>
+<button onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+
+<aside class="sidebar">
+<a href="dashboard.html" class="nav-link">Dashboard</a>
+<a href="orders.html" class="nav-link">Orders</a>
+<a href="branches.html" class="nav-link">Branches</a>
+</aside>
+
+<main class="main">
+
+<h1>Branches</h1>
+
+<div class="form-box">
+<input type="text" id="branchName" placeholder="Branch Name">
+<button onclick="addBranch()">Add</button>
+</div>
+
+<ul id="branchList"></ul>
+
+</main>
+</div>
+
+<script>
+
+function logout() {
+if (confirm("Logout?")) {
+localStorage.removeItem("loggedIn");
+window.location.href = "login.html";
+}
+}
+
+function addBranch() {
+const name = document.getElementById("branchName").value.trim();
+
+if (!name) return alert("Enter branch name");
+
+let branches = JSON.parse(localStorage.getItem("branches")) || [];
+
+/* prevent duplicate */
+if (branches.some(b => b.name.toLowerCase() === name.toLowerCase())) {
+return alert("Branch already exists");
+}
+
+branches.push({ name });
+localStorage.setItem("branches", JSON.stringify(branches));
+
+loadBranches();
+}
+
+function deleteBranch(index) {
+let branches = JSON.parse(localStorage.getItem("branches")) || [];
+branches.splice(index, 1);
+localStorage.setItem("branches", JSON.stringify(branches));
+loadBranches();
+}
+
+function loadBranches() {
+const branches = JSON.parse(localStorage.getItem("branches")) || [];
+const list = document.getElementById("branchList");
+list.innerHTML = "";
+
+branches.forEach((b, i) => {
+list.innerHTML += `
+<li>
+${b.name}
+<button onclick="deleteBranch(${i})">Delete</button>
+</li>`;
+});
+}
+
+loadBranches();
+
+const currentPage = window.location.pathname.split("/").pop();
+document.querySelectorAll(".nav-link").forEach(link => {
+if (link.getAttribute("href") === currentPage) {
+link.classList.add("active");
+}
+});
+
+</script>
+</body>
+</html>
