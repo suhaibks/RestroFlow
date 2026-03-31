@@ -2,44 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Simple Website</title>
+  <title>RestroFlow</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h1>My Website</h1>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#features">Features</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+<header class="navbar">
+  <h2>RestroFlow</h2>
+  <div>
+    <a href="login.html">Login</a>
+    <a href="signup.html" class="btn">Get Started</a>
+  </div>
+</header>
 
-  <section class="hero">
-    <h2>Welcome to My Site</h2>
-    <p>This is a simple frontend website.</p>
-    <button onclick="showMessage()">Click Me</button>
-  </section>
+<section class="hero">
+  <h1>Manage Your Restaurant Chain in One Dashboard</h1>
+  <p>Control orders, menus, branches, and analytics — all in one place.</p>
+  <a href="signup.html" class="btn">Start Free Trial</a>
+</section>
 
-  <section id="features">
-    <h2>Features</h2>
-    <ul>
-      <li>Fast</li>
-      <li>Simple</li>
-      <li>Responsive</li>
-    </ul>
-  </section>
+<section class="features">
+  <h2>Features</h2>
+  <div class="grid">
+    <div>Multi-Branch Management</div>
+    <div>Live Order Tracking</div>
+    <div>Menu & Pricing Control</div>
+    <div>Sales Analytics</div>
+    <div>Staff Roles</div>
+    <div>Inventory Tracking</div>
+  </div>
+</section>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Email: example@email.com</p>
-  </section>
+<section class="how">
+  <h2>How It Works</h2>
+  <div class="grid">
+    <div>1. Sign Up</div>
+    <div>2. Add Branches</div>
+    <div>3. Manage Operations</div>
+  </div>
+</section>
 
-  <footer>
-    <p>© 2026 My Website</p>
-  </footer>
+<section class="cta">
+  <h2>Start Managing Your Restaurants Today</h2>
+  <a href="signup.html" class="btn">Get Started</a>
+</section>
 
-  <script src="script.js"></script>
+<footer>
+  <p>© 2026 RestroFlow</p>
+</footer>
+
 </body>
 </html>
