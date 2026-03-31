@@ -5,6 +5,11 @@
   <title>Dashboard</title>
   <link rel="stylesheet" href="dashboard.css">
 </head>
+  <script>
+  if (localStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
 <body>
 
 <div class="container">
