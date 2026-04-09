@@ -29,12 +29,20 @@ body {
 }
 
 /* Sidebar */
-.sidebar {
-  width: 200px;
-  background: white;
-  border-right: 1px solid #eee;
-  height: calc(100vh - 60px);
-  padding: 20px;
+.sidebar a{
+    display:block;
+    padding:12px 14px;
+    margin-bottom:10px;
+    border-radius:10px;
+    text-decoration:none;
+    color:black;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.sidebar a.active{
+    background:black;
+    color:white;
 }
 
 .sidebar a {
