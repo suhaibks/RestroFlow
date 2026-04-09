@@ -45,13 +45,6 @@ body {
     color:white;
 }
 
-.sidebar a {
-  display: block;
-  margin: 12px 0;
-  text-decoration: none;
-  color: black;
-}
-
 /* Main */
 .main {
   flex: 1;
