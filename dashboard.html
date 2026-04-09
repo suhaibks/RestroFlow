@@ -1,262 +1,163 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard</title>
 <link rel="stylesheet" href="dashboard.css">
 
 <script>
-if(localStorage.getItem("loggedIn")!=="true"){
-location.href="login.html";
+if(localStorage.getItem("loggedIn") !== "true"){
+    location.href = "login.html";
 }
 </script>
+
 </head>
 <body>
 
 <header class="topbar">
-<h2>RestroFlow</h2>
-<button onclick="logout()">Logout</button>
+    <h2>RestroFlow</h2>
+    <button onclick="logout()">Logout</button>
 </header>
 
 <div class="container">
 
-<aside class="sidebar">
-<a href="dashboard.html" class="nav-link">Dashboard</a>
-<a href="orders.html" class="nav-link">Orders</a>
-<a href="branches.html" class="nav-link">Branches</a>
-<a href="analytics.html" class="nav-link">Analytics</a>
-</aside>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="dashboard.html" class="nav-link">Dashboard</a>
+        <a href="orders.html" class="nav-link">Orders</a>
+        <a href="branches.html" class="nav-link">Branches</a>
+        <a href="analytics.html" class="nav-link">Analytics</a>
+    </aside>
 
-<main class="main">
+    <!-- Main Content -->
+    <main class="main">
 
-<h1>Dashboard</h1>
+        <h1>Dashboard Overview</h1>
 
-<div class="cards">
-<div id="totalOrders"></div>
-<div id="totalRevenue"></div>
-<div id="totalBranches"></div>
-<div id="pendingOrders"></div>
-</div>
+        <!-- Stats Cards -->
+        <div class="cards">
 
-<h2>Recent Orders</h2>
+            <div class="card">
+                <h3>Total Orders</h3>
+                <p id="totalOrders">0</p>
+            </div>
 
-<table>
-<thead>
-<tr>
-<th>ID</th><th>Branch</th><th>Status</th>
-</tr>
-</thead>
-<tbody id="ordersTable"></tbody>
-</table>
+            <div class="card">
+                <h3>Total Revenue</h3>
+                <p id="totalRevenue">₹0</p>
+            </div>
 
-    <h1>Analytics</h1>
+            <div class="card">
+                <h3>Total Branches</h3>
+                <p id="totalBranches">0</p>
+            </div>
 
-<!-- Month Filter -->
-<div style="margin-bottom:20px;">
-<select id="monthFilter" onchange="loadAnalytics()">
-<option value="all">All Months</option>
-</select>
-</div>
+            <div class="card">
+                <h3>Active Orders</h3>
+                <p id="activeOrders">0</p>
+            </div>
 
-<h2>Revenue</h2>
+        </div>
 
-<table>
-<thead>
-<tr>
-<th>Month</th>
-<th>Revenue</th>
-</tr>
-</thead>
-<tbody id="revenueTable"></tbody>
-</table>
+        <!-- Recent Orders -->
+        <h2 style="margin-top:40px;">Recent Orders</h2>
 
-<div style="margin-top:40px;">
-<canvas id="revenueChart"></canvas>
-</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Branch</th>
+                    <th>Items</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="recentOrdersTable"></tbody>
+        </table>
 
-</main>
+    </main>
+
 </div>
 
 <script>
 
-/* fix old data */
-function fixOldOrders(){
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
-let updated = false;
-
-orders.forEach(o=>{
-if(!o.time || isNaN(new Date(o.time))){
-o.time = new Date().toISOString();
-updated = true;
-}
-});
-
-if(updated){
-localStorage.setItem("orders", JSON.stringify(orders));
-}
-}
-
-/* helpers */
-function getMonthKey(dateStr){
-const d = new Date(dateStr);
-return `${d.getFullYear()}-${d.getMonth()}`;
-}
-
-function formatMonth(key){
-const [year, month] = key.split("-");
-return new Date(year, month).toLocaleString('default',{month:'short',year:'numeric'});
-}
-
-/* populate dropdown */
-function loadMonthOptions(monthKeys){
-const select = document.getElementById("monthFilter");
-
-select.innerHTML = `<option value="all">All Months</option>`;
-
-monthKeys.forEach(key=>{
-select.innerHTML += `<option value="${key}">${formatMonth(key)}</option>`;
-});
-}
-
-/* main analytics */
-function loadAnalytics(){
-
-const orders = JSON.parse(localStorage.getItem("orders")) || [];
-const selectedMonth = document.getElementById("monthFilter").value;
-
-let monthly = {};
-
-/* group */
-orders.forEach(o=>{
-if(!o.time) return;
-
-const key = getMonthKey(o.time);
-
-if(!monthly[key]) monthly[key] = 0;
-
-monthly[key] += Number(o.amount || 0);
-});
-
-/* sort */
-const sortedKeys = Object.keys(monthly).sort((a,b)=>new Date(a)-new Date(b));
-
-/* load dropdown once */
-if(!window.monthLoaded){
-loadMonthOptions(sortedKeys);
-window.monthLoaded = true;
-}
-
-const table = document.getElementById("revenueTable");
-table.innerHTML = "";
-
-let labels = [];
-let data = [];
-
-/* filter logic */
-sortedKeys.forEach(key=>{
-
-if(selectedMonth !== "all" && key !== selectedMonth) return;
-
-table.innerHTML += `
-<tr>
-<td>${formatMonth(key)}</td>
-<td>₹${monthly[key]}</td>
-</tr>
-`;
-
-labels.push(formatMonth(key));
-data.push(monthly[key]);
-
-});
-
-/* empty */
-if(labels.length === 0){
-table.innerHTML = `
-<tr>
-<td colspan="2" style="text-align:center;color:#666;padding:20px;">
-No data available
-</td>
-</tr>`;
-}
-
-/* destroy old chart */
-if(window.chart){
-window.chart.destroy();
-}
-
-/* chart */
-const ctx = document.getElementById("revenueChart");
-
-window.chart = new Chart(ctx, {
-type: 'line',
-data: {
-labels: labels,
-datasets: [{
-label: 'Revenue',
-data: data,
-borderWidth: 2,
-fill: false
-}]
-},
-options: {
-responsive: true
-}
-});
-
-}
-
-/* run */
-fixOldOrders();
-loadAnalytics();
-
-/* active nav */
-const p = location.pathname.split("/").pop();
-document.querySelectorAll(".nav-link").forEach(l=>{
-if(l.getAttribute("href")===p) l.classList.add("active");
-});
-
-  
+/* Logout */
 function logout(){
-if(confirm("Logout?")){
-localStorage.removeItem("loggedIn");
-location.href="index.html";
-}
+    if(confirm("Logout from dashboard?")){
+        localStorage.removeItem("loggedIn");
+        location.href = "index.html";
+    }
 }
 
+/* Load Dashboard Data */
 function loadDashboard(){
-const orders=JSON.parse(localStorage.getItem("orders"))||[];
-const branches=JSON.parse(localStorage.getItem("branches"))||[];
 
-let revenue=0,pending=0;
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    let branches = JSON.parse(localStorage.getItem("branches")) || [];
 
-orders.forEach(o=>{
-revenue+=Number(o.amount||0);
-if(o.status==="Pending") pending++;
-});
+    let totalRevenue = 0;
+    let activeOrders = 0;
 
-totalOrders.innerText="Total Orders: "+orders.length;
-totalRevenue.innerText="Revenue: ₹"+revenue;
-totalBranches.innerText="Branches: "+branches.length;
-pendingOrders.innerText="Pending: "+pending;
+    orders.forEach(order => {
 
-ordersTable.innerHTML="";
-orders.slice(-5).reverse().forEach(o=>{
-ordersTable.innerHTML+=`
-<tr>
-<td>#${o.id}</td>
-<td>${o.branch}</td>
-<td>${o.status}</td>
-</tr>`;
-});
+        totalRevenue += Number(order.amount || 0);
+
+        if(order.status === "Pending" || order.status === "Preparing"){
+            activeOrders++;
+        }
+
+    });
+
+    /* Fill cards */
+    document.getElementById("totalOrders").innerText = orders.length;
+    document.getElementById("totalRevenue").innerText = "₹" + totalRevenue;
+    document.getElementById("totalBranches").innerText = branches.length;
+    document.getElementById("activeOrders").innerText = activeOrders;
+
+    /* Recent Orders */
+    let table = document.getElementById("recentOrdersTable");
+    table.innerHTML = "";
+
+    let recentOrders = orders.slice(-5).reverse();
+
+    recentOrders.forEach(order => {
+
+        table.innerHTML += `
+            <tr>
+                <td>#${order.id}</td>
+                <td>${order.branch}</td>
+                <td>${order.items}</td>
+                <td>${order.status}</td>
+                <td>₹${order.amount}</td>
+            </tr>
+        `;
+
+    });
+
+    if(recentOrders.length === 0){
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align:center;padding:20px;color:#666;">
+                    No recent orders available
+                </td>
+            </tr>
+        `;
+    }
+
 }
 
 loadDashboard();
 
-/* active nav */
-const p=location.pathname.split("/").pop();
-document.querySelectorAll(".nav-link").forEach(l=>{
-if(l.getAttribute("href")===p)l.classList.add("active");
+/* Active Sidebar Highlight */
+const currentPage = location.pathname.split("/").pop();
+
+document.querySelectorAll(".nav-link").forEach(link => {
+    if(link.getAttribute("href") === currentPage){
+        link.classList.add("active");
+    }
 });
+
 </script>
 
 </body>
